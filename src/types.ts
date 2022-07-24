@@ -67,9 +67,11 @@ export class Skills {
     perf: Skill = new Skill("performance", "cha");
     pers: Skill = new Skill("persuasion", "cha");
     constructor(skills?: Skills) {
-        Object.entries(skills).forEach(
-            ([k, v]) =>
-                (this[k].proficiency = new Proficiency(v.proficiencyBonus))
-        );
+        if (skills != null) {
+            Object.entries(skills).forEach(
+                ([k, v]) =>
+                    (this[k].proficiency = new Proficiency(v.proficiencyBonus))
+            );
+        }
     }
 }

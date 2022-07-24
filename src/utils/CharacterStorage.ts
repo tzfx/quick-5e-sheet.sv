@@ -12,7 +12,11 @@ export class CharacterStorage {
             name == null
                 ? localforage
                       .getItem<string>("last")
-                      .then((last) => localforage.getItem<Character>(last))
+                      .then((last) =>
+                          last == null
+                              ? null
+                              : localforage.getItem<Character>(last)
+                      )
                 : localforage.getItem<Character>(name)
         ).then((c) => this.hydrate(c));
     }
@@ -42,9 +46,10 @@ export class CharacterStorage {
         return localforage.setItem("idlist", this.idlist);
     }
 
-    hydrate(character: Character): Character {
-        const skills = new Skills(character.skills);
-        return { ...character, skills };
+    hydrate(character?: Character): Character {
+        return character != null
+            ? { ...character, skills: new Skills(character.skills) }
+            : null;
     }
 
     export(character: Character) {
