@@ -6,11 +6,20 @@ export type Character = {
     skills: Skills;
 };
 
-export type Proficiency = 0 | 0.5 | 1 | 2;
+type ProficiencyBonus = 0 | 1 | 2;
 
+export class Proficiency {
+    private values: ProficiencyBonus[] = [0, 1, 2];
+    constructor(public bonus: ProficiencyBonus = 0) {}
+    next() {
+        const next = this.values.indexOf(this.bonus) + 1;
+        this.bonus = this.values[next > this.values.length - 1 ? 0 : next];
+        return this.bonus;
+    }
+}
 export class Ability {
     score: number = 10;
-    proficiency: Proficiency = 0;
+    saveProficiency: boolean = false;
 
     constructor(public name: string) {}
 }
@@ -22,13 +31,19 @@ export class AbilityScores {
     int = new Ability("intelligence");
     wis = new Ability("wisdom");
     cha = new Ability("charisma");
+    constructor(clazz?: any) {
+        // Prepopulate save proficiencies from class definition.
+        clazz?.proficiency.forEach(
+            (p: keyof AbilityScores) => (this[p].saveProficiency = true)
+        );
+    }
 }
 
 export class Skill {
     proficiency: Proficiency;
 
     constructor(public name: string, public type: keyof AbilityScores) {
-        this.proficiency = 0;
+        this.proficiency = new Proficiency();
     }
 }
 
@@ -51,4 +66,10 @@ export class Skills {
     int: Skill = new Skill("intimidation", "cha");
     perf: Skill = new Skill("performance", "cha");
     pers: Skill = new Skill("persuasion", "cha");
+    constructor(skills?: Skills) {
+        Object.entries(skills).forEach(
+            ([k, v]) =>
+                (this[k].proficiency = new Proficiency(v.proficiencyBonus))
+        );
+    }
 }

@@ -1,6 +1,6 @@
 import * as localforage from "localforage";
 
-import type { Character } from "../types";
+import { Character, Skills } from "../types";
 
 localforage.config({ name: "q5es.sv#1.0.0" });
 
@@ -8,12 +8,13 @@ export class CharacterStorage {
     private idlist: string[] = [];
 
     async get(name?: string): Promise<Character> {
-        if (name == null) {
-            const lastsaved = await localforage.getItem<string>("last");
-            return await localforage.getItem<Character>(lastsaved);
-        } else {
-            return localforage.getItem<Character>(name);
-        }
+        return (
+            name == null
+                ? localforage
+                      .getItem<string>("last")
+                      .then((last) => localforage.getItem<Character>(last))
+                : localforage.getItem<Character>(name)
+        ).then((c) => this.hydrate(c));
     }
 
     async list(refresh = false): Promise<string[]> {
@@ -39,6 +40,11 @@ export class CharacterStorage {
         await localforage.removeItem(id);
         this.idlist = this.idlist.filter((i) => i !== id);
         return localforage.setItem("idlist", this.idlist);
+    }
+
+    hydrate(character: Character): Character {
+        const skills = new Skills(character.skills);
+        return { ...character, skills };
     }
 
     export(character: Character) {

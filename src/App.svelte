@@ -15,11 +15,12 @@
     const load = async (id?: string) => {
         let character = await storage.get(id);
         if (character == null) {
+            const clazz = randomClass();
             character = {
-                clazz: randomClass(),
+                clazz,
                 name: null,
                 level: 1,
-                abilities: new AbilityScores(),
+                abilities: new AbilityScores(clazz),
                 skills: new Skills(),
             };
         }
