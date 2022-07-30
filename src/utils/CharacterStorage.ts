@@ -30,14 +30,14 @@ export class CharacterStorage {
         return this.idlist;
     }
 
-    set(Character: Character): Promise<Character> {
-        const { name } = Character;
+    set(character: Character): Promise<Character> {
+        const { name } = character;
         if (!this.idlist.includes(name)) {
             this.idlist.push(name);
             localforage.setItem("idlist", this.idlist);
         }
-        localforage.setItem("last", Character.name);
-        return localforage.setItem(name, Character);
+        localforage.setItem("last", character.name);
+        return localforage.setItem(name, character);
     }
 
     async delete(id: string) {
@@ -48,12 +48,18 @@ export class CharacterStorage {
 
     hydrate(character?: Character): Character {
         return character != null
-            ? { ...character, skills: new Skills(character.skills) }
+            ? {
+                  ...character,
+                  skills: new Skills(character.skills),
+              }
             : null;
     }
 
     export(character: Character) {
-        throw Error("Export not yet implemented.");
+        const output = new Blob([JSON.stringify(character)], {
+            type: "application/json",
+        });
+        document.location = URL.createObjectURL(output);
     }
 
     import() {

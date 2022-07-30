@@ -1,8 +1,8 @@
 <script lang="ts">
     import { randomClass } from "./srd/classes";
     import { CharacterStorage } from "./utils/CharacterStorage";
-    import { Character, AbilityScores, Skills } from "./types";
-    import Sheet from "./Sheet.svelte";
+    import { Character, AbilityScores, Skills, Skill, Ability } from "./types";
+    import Sheet, { character } from "./Sheet.svelte";
 
     const storage: CharacterStorage = new CharacterStorage();
     let idlist: string[] = [];

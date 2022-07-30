@@ -17,6 +17,7 @@ export class Proficiency {
         return this.bonus;
     }
 }
+
 export class Ability {
     score: number = 10;
     saveProficiency: boolean = false;
@@ -68,10 +69,9 @@ export class Skills {
     pers: Skill = new Skill("persuasion", "cha");
     constructor(skills?: Skills) {
         if (skills != null) {
-            Object.entries(skills).forEach(
-                ([k, v]) =>
-                    (this[k].proficiency = new Proficiency(v.proficiencyBonus))
-            );
+            Object.entries(skills).forEach(([k, v]: [keyof Skills, Skill]) => {
+                this[k].proficiency = new Proficiency(v.proficiency.bonus);
+            });
         }
     }
 }

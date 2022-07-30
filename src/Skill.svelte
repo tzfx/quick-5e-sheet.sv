@@ -1,22 +1,46 @@
 <script lang="ts">
-    import type { AbilityScores, Skill } from "./types";
-    import { mod } from "./utils/mod";
-    export let skill: Skill;
-    export let abilities: AbilityScores;
-    export let proficiencyBonus: number;
-    export let onchange: () => void;
+    import type { Skill } from "./types";
+    import { modraw } from "./utils/mod";
+    import { skills } from "./srd/skills";
 
-    const score = abilities[skill.type].score;
+    export let abilityscore: number;
+    export let locked: boolean = true;
+    export let onchange: () => void;
+    export let proficiencyBonus: number;
+    export let skill: Skill;
+
+    let modifier =
+        modraw(abilityscore) + skill.proficiency.bonus * proficiencyBonus;
+
+    let updateModifier = () =>
+        (modifier =
+            modraw(abilityscore) + skill.proficiency.bonus * proficiencyBonus);
+
+    const skilldata = skills.find(
+        (s) => s.name.toLowerCase() === skill.name.toLowerCase()
+    );
 </script>
 
 <div class="text-right">
-    {skill.name}
-    {mod(score)} +{skill.proficiency.bonus * proficiencyBonus}
+    <span
+        class="cursor-help"
+        title={skilldata.entries
+            .map((e) =>
+                e.items != null
+                    ? "\n" + e.items.map((i) => "- " + i).join("\n")
+                    : e
+            )
+            .join("\n")}>{skill.name}</span
+    >
+    {modifier > 0 ? "+" + modifier : modifier}
     <i
         title="proficient"
         on:click={() => {
-            skill.proficiency.bonus = skill.proficiency.next();
-            onchange();
+            if (!locked) {
+                skill.proficiency.bonus = skill.proficiency.next();
+                updateModifier();
+                onchange();
+            }
         }}
         class="text-lg mx-auto las {skill.proficiency.bonus === 0
             ? 'la-circle'

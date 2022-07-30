@@ -5,16 +5,27 @@
     import { randomName } from "./srd/names/names";
     import Ability from "./Ability.svelte";
     import Skill from "./Skill.svelte";
-    import { proficiency } from "./utils/mod";
+    import { mod, proficiency } from "./utils/mod";
 
     export let character: Character;
     export let save: (character: Character) => void;
 
-    let locked = true;
+    let abilitieslocked = true;
+    let skillslocked = true;
     let proficiencyBonus = 2;
+
+    let blob = new Blob([JSON.stringify(character)], {
+        type: "application/json",
+    });
+
+    let dl = URL.createObjectURL(blob);
 
     const trySave = () => {
         if (![null, ""].includes(character.name)) save(character);
+        blob = new Blob([JSON.stringify(character)], {
+            type: "application/json",
+        });
+        dl = URL.createObjectURL(blob);
     };
 </script>
 
@@ -60,24 +71,39 @@
             min="1"
             type="number"
         />.
+        <a
+            hidden={[null, ""].includes(character.name)}
+            download={character.name + ".json"}
+            href={dl}
+            title="download"><i class="las la-lg la-cloud-download-alt" /></a
+        >
     </p>
     <hr />
     <div>
         <h2>
             Abilities <i
-                on:click={() => (locked = !locked)}
-                class="las {locked ? 'la-lock' : 'la-unlock'}"
+                on:click={() => (abilitieslocked = !abilitieslocked)}
+                class="las {abilitieslocked ? 'la-lock' : 'la-unlock'}"
             />
         </h2>
         <div class="flex flex-row justify-center">
             {#each Object.values(character.abilities) as ability}
-                <Ability onchange={() => trySave()} {locked} {ability} />
+                <Ability
+                    onchange={() => trySave()}
+                    locked={abilitieslocked}
+                    {ability}
+                />
             {/each}
         </div>
     </div>
     <hr />
     <div>
-        <h2>Skills</h2>
+        <h2>
+            Skills <i
+                on:click={() => (skillslocked = !skillslocked)}
+                class="las {skillslocked ? 'la-lock' : 'la-unlock'}"
+            />
+        </h2>
         <div class="flex md:flex-row flex-col justify-center">
             {#each Object.entries(Object.values(character.skills).reduce( (p, c) => {
                         if (p[c.type] == null) {
@@ -93,8 +119,9 @@
                         <Skill
                             onchange={() => trySave()}
                             {proficiencyBonus}
+                            locked={skillslocked}
+                            abilityscore={character.abilities[sbt[0]].score}
                             {skill}
-                            abilities={character.abilities}
                         />
                     {/each}
                 </div>
