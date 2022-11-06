@@ -21,6 +21,5 @@ export const modraw = (score: number) => Math.floor((score - 10) / 2);
  * @returns Proficiency score.
  */
 export const proficiency = (level: number) => {
-    if (level === 1) return 2;
-    return Math.floor(level / 5) + 1;
+    return Math.floor(level / 5) + 2;
 };
