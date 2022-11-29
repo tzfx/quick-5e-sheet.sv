@@ -5,14 +5,14 @@
     import { randomName } from "./srd/names/names";
     import Ability from "./Ability.svelte";
     import Skill from "./Skill.svelte";
-    import { mod, proficiency } from "./utils/mod";
+    import { modraw, proficiency } from "./utils/mod";
 
     export let character: Character;
     export let save: (character: Character) => void;
 
     let abilitieslocked = true;
     let skillslocked = true;
-    let proficiencyBonus = 2;
+    let proficiencyBonus = proficiency(character.level);
 
     let blob = new Blob([JSON.stringify(character)], {
         type: "application/json",
@@ -21,11 +21,13 @@
     let dl = URL.createObjectURL(blob);
 
     const trySave = () => {
-        if (![null, ""].includes(character.name)) save(character);
-        blob = new Blob([JSON.stringify(character)], {
-            type: "application/json",
-        });
-        dl = URL.createObjectURL(blob);
+        if (![null, ""].includes(character.name)) {
+            save(character);
+            blob = new Blob([JSON.stringify(character)], {
+                type: "application/json",
+            });
+            dl = URL.createObjectURL(blob);
+        }
     };
 </script>
 
@@ -81,7 +83,7 @@
     <hr />
     <div>
         <h2>
-            Abilities <i
+            Abilities <button
                 on:click={() => (abilitieslocked = !abilitieslocked)}
                 class="las {abilitieslocked ? 'la-lock' : 'la-unlock'}"
             />
@@ -95,11 +97,27 @@
                 />
             {/each}
         </div>
+        <div>
+            Proficiency Bonus: +{proficiencyBonus}
+            <i class="las la-info-circle cursor-help" title="floor(level / 5) + 2" />
+        </div>
+        <div>
+            Spell Save DC: {8 +
+                modraw(
+                    character.abilities[character.clazz.spellcastingAbility]
+                        .score
+                ) +
+                proficiencyBonus}
+            <i
+                class="las la-info-circle cursor-help"
+                title="8 + casting modifier + proficiency"
+            />
+        </div>
     </div>
     <hr />
     <div>
         <h2>
-            Skills <i
+            Skills <button
                 on:click={() => (skillslocked = !skillslocked)}
                 class="las {skillslocked ? 'la-lock' : 'la-unlock'}"
             />

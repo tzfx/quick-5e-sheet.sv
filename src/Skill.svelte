@@ -9,12 +9,13 @@
     export let proficiencyBonus: number;
     export let skill: Skill;
 
-    let modifier =
-        modraw(abilityscore) + skill.proficiency.bonus * proficiencyBonus;
+    let modifier: number;
 
     let updateModifier = () =>
         (modifier =
             modraw(abilityscore) + skill.proficiency.bonus * proficiencyBonus);
+
+    updateModifier();
 
     const skilldata = skills.find(
         (s) => s.name.toLowerCase() === skill.name.toLowerCase()
@@ -26,6 +27,7 @@
         class="cursor-help"
         title={skilldata.entries
             .map((e) =>
+                typeof(e) === "object" &&
                 e.items != null
                     ? "\n" + e.items.map((i) => "- " + i).join("\n")
                     : e

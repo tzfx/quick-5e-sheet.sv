@@ -1,8 +1,8 @@
 <script lang="ts">
+    import Sheet from "./Sheet.svelte";
     import { randomClass } from "./srd/classes";
+    import { AbilityScores, Character, Skills } from "./types";
     import { CharacterStorage } from "./utils/CharacterStorage";
-    import { Character, AbilityScores, Skills, Skill, Ability } from "./types";
-    import Sheet, { character } from "./Sheet.svelte";
 
     const storage: CharacterStorage = new CharacterStorage();
     let idlist: string[] = [];
@@ -43,7 +43,8 @@
         <a
             href="https://github.com/tzfx"
             class="text-xs right-4 top-2 absolute"
-            target="_blank">made with 🧙 by tzfx</a
+            target="_blank"
+            rel="noreferrer">made with 🧙 by tzfx</a
         >
     </div>
     <h1
@@ -52,8 +53,8 @@
         Q5ES.sv
     </h1>
     <div class="flex flex-row-reverse">
-        <p
-            class="w-fit h-min p-2 text-sm mb-2 text-slate-500 border-2 cursor-pointer"
+        <button
+            class="w-fit h-min p-2 text-sm mb-2 text-slate-500 border-2"
             on:click={() => (showSelect = !showSelect)}
         >
             <i
@@ -62,17 +63,17 @@
                 }`}
             />
             saved characters ({idlist.length})
-        </p>
+        </button>
         {#await loading then _}
             {#if showSelect}
                 {#each idlist as id}
-                    <p
+                    <button
                         class="w-fit mr-2 h-min p-2 text-sm mb-2 text-slate-500 border-2 cursor-pointer"
                         on:click={() => (loading = load(id))}
                     >
                         {id}
-                    </p>
-                    <p
+                    </button>
+                    <button
                         class="text-red-500 border-1 cursor-pointer border-red-500 h-min align-middle"
                         on:click={async () => {
                             await remove(id);
@@ -80,7 +81,7 @@
                         }}
                     >
                         <i class="las la-trash-alt" />
-                    </p>
+                    </button>
                 {/each}
             {/if}
         {/await}
