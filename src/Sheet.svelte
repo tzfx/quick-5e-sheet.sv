@@ -99,20 +99,25 @@
         </div>
         <div>
             Proficiency Bonus: +{proficiencyBonus}
-            <i class="las la-info-circle cursor-help" title="floor(level / 5) + 2" />
-        </div>
-        <div>
-            Spell Save DC: {8 +
-                modraw(
-                    character.abilities[character.clazz.spellcastingAbility]
-                        .score
-                ) +
-                proficiencyBonus}
             <i
                 class="las la-info-circle cursor-help"
-                title="8 + casting modifier + proficiency"
+                title="floor(level / 5) + 2"
             />
         </div>
+        {#if character.clazz.spellcastingAbility != null}
+            <div>
+                Spell Save DC: {8 +
+                    modraw(
+                        character.abilities[character.clazz.spellcastingAbility]
+                            .score
+                    ) +
+                    proficiencyBonus}
+                <i
+                    class="las la-info-circle cursor-help"
+                    title="8 + casting modifier + proficiency"
+                />
+            </div>
+        {/if}
     </div>
     <hr />
     <div>
