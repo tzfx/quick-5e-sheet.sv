@@ -6,7 +6,9 @@
         "build": "vite build",
         "check": "svelte-check --tsconfig ./tsconfig.json",
         "dev": "vite",
-        "test": "vitest"
+        "test": "vitest",
+        "format": "prettier --check ./src",
+        "format:fix": "prettier --write ./src"
     },
     "type": "module",
     "devDependencies": {
@@ -20,6 +22,7 @@
         "autoprefixer": "^10.4.13",
         "postcss": "^8.4.20",
         "postcss-cli": "^10.1.0",
+        "prettier-plugin-svelte": "^2.9.0",
         "rollup": "^3.7.4",
         "rollup-plugin-css-only": "^4.3.0",
         "rollup-plugin-livereload": "^2.0.5",

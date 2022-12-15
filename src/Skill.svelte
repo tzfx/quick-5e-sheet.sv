@@ -27,15 +27,14 @@
         class="cursor-help"
         title={skilldata.entries
             .map((e) =>
-                typeof(e) === "object" &&
-                e.items != null
+                typeof e === "object" && e.items != null
                     ? "\n" + e.items.map((i) => "- " + i).join("\n")
                     : e
             )
             .join("\n")}>{skill.name}</span
     >
     {modifier > 0 ? "+" + modifier : modifier}
-    <i
+    <button
         title="proficient"
         on:click={() => {
             if (!locked) {
@@ -44,6 +43,7 @@
                 onchange();
             }
         }}
+        disabled={locked}
         class="text-lg mx-auto las {skill.proficiency.bonus === 0
             ? 'la-circle'
             : skill.proficiency.bonus === 1

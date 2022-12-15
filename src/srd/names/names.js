@@ -8906,6 +8906,8 @@ export const names = [
 export const randomName = () => {
     const rrace = Math.floor(Math.random() * names.length);
     const option = Math.floor(Math.random() * names[rrace].tables.length);
-    const name = Math.floor(Math.random() *  names[rrace].tables[option].table.length);
-    return  names[rrace].tables[option].table[name].result;
-}
+    const name = Math.floor(
+        Math.random() * names[rrace].tables[option].table.length
+    );
+    return names[rrace].tables[option].table[name].result;
+};

@@ -1,4 +1,4 @@
-import {expect, describe, it} from "vitest";
+import { expect, describe, it } from "vitest";
 
 import * as mod from "./mod";
 
@@ -17,5 +17,5 @@ describe("mod utilities", () => {
         expect(mod.proficiency(1)).toBe(2);
         expect(mod.proficiency(5)).toBe(3);
         expect(mod.proficiency(10)).toBe(4);
-    })
-})
+    });
+});
