@@ -1,6 +1,7 @@
 import * as localforage from "localforage";
 
-import { Character, Skills } from "../types";
+import { Skills } from "../types";
+import type { Character } from "../types"
 
 localforage.config({ name: "q5es.sv#1.0.0" });
 

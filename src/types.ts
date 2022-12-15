@@ -19,10 +19,8 @@ export class Proficiency {
 }
 
 export class Ability {
-    score: number = 10;
     saveProficiency: boolean = false;
-
-    constructor(public name: string) {}
+    constructor(public name: string, public score = 10) {}
 }
 
 export class AbilityScores {
