@@ -1,7 +1,8 @@
 import * as localforage from "localforage";
 
 import { Skills } from "../types";
-import type { Character } from "../types"
+import type { Character } from "../types";
+import { encode } from "./encode-decode";
 
 localforage.config({ name: "q5es.sv#1.0.0" });
 
@@ -57,8 +58,8 @@ export class CharacterStorage {
     }
 
     export(character: Character) {
-        const output = new Blob([JSON.stringify(character)], {
-            type: "application/json",
+        const output = new Blob([encode(character)], {
+            type: "text/plain",
         });
         document.location = URL.createObjectURL(output);
     }

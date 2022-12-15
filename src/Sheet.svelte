@@ -6,6 +6,7 @@
     import Ability from "./Ability.svelte";
     import Skill from "./Skill.svelte";
     import { modraw, proficiency } from "./utils/mod";
+    import { encode } from "./utils/encode-decode";
 
     export let character: Character;
     export let save: (character: Character) => void;
@@ -14,8 +15,8 @@
     let skillslocked = true;
     let proficiencyBonus = proficiency(character.level);
 
-    let blob = new Blob([JSON.stringify(character)], {
-        type: "application/json",
+    let blob = new Blob([encode(character)], {
+        type: "text/plain",
     });
 
     let dl = URL.createObjectURL(blob);
@@ -75,7 +76,7 @@
         />.
         <a
             hidden={[null, ""].includes(character.name)}
-            download={character.name + ".json"}
+            download={character.name + ".csv"}
             href={dl}
             title="download"><i class="las la-lg la-cloud-download-alt" /></a
         >

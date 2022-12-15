@@ -2,17 +2,18 @@ import { AbilityScores, Skills } from "../types";
 import type { Character } from "../types";
 import { classes } from "../srd/classes";
 
-import { encode, version } from "./encode-decode";
+import { encode, decode, version } from "./encode-decode";
 
-describe("encoder/decode", () => {
-    test(`encode a ${version} character with `, () => {
+import { describe, it, expect } from "vitest";
 
+describe("encode/decode utilities", () => {
+    it(`should encode/decode a v${version} character`, () => {
         const character: Character = {
             name: "Frank",
             clazz: classes.cleric,
             level: 5,
             abilities: new AbilityScores(classes.cleric),
-            skills: new Skills()
+            skills: new Skills(),
         };
         // Standard array.
         character.abilities.str.score = 12;
@@ -27,7 +28,9 @@ describe("encoder/decode", () => {
         character.skills.arc.proficiency.next();
 
         const encoded = encode(character);
-        // expect(encoded).toMatchSnapshot();
-
+        expect(encoded).toMatch(
+            "1,Frank,cle,5,12,13,14,8,15,10,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0"
+        );
+        expect(decode(encoded)).toStrictEqual(character);
     });
 });
