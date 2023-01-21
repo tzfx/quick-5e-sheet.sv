@@ -6,6 +6,7 @@
     import Ability from "./Ability.svelte";
     import Skill from "./Skill.svelte";
     import { modraw, proficiency } from "./utils/mod";
+    import { encode } from "./utils/encode-decode";
 
     export let character: Character;
     export let save: (character: Character) => void;
@@ -14,8 +15,8 @@
     let skillslocked = true;
     let proficiencyBonus = proficiency(character.level);
 
-    let blob = new Blob([JSON.stringify(character)], {
-        type: "application/json",
+    let blob = new Blob([encode(character)], {
+        type: "text/plain",
     });
 
     let dl = URL.createObjectURL(blob);
@@ -28,6 +29,16 @@
             });
             dl = URL.createObjectURL(blob);
         }
+    };
+
+    const calcHp = () => {
+        return (
+            character.clazz.hd.faces +
+            modraw(character.abilities.con.score) +
+            ((character.level - 1) *
+                (Math.ceil(character.clazz.hd.faces / 2) + 1) +
+                modraw(character.abilities.con.score))
+        );
     };
 </script>
 
@@ -75,7 +86,7 @@
         />.
         <a
             hidden={[null, ""].includes(character.name)}
-            download={character.name + ".json"}
+            download={character.name + ".csv"}
             href={dl}
             title="download"><i class="las la-lg la-cloud-download-alt" /></a
         >
@@ -96,6 +107,17 @@
                     {ability}
                 />
             {/each}
+        </div>
+        <div>
+            Estimated Max HP: {calcHp()}
+            <i
+                class="las la-info-circle cursor-help"
+                title="hitdie + con + ((level - 1) × (ceil(hitdie / 2) + 1) + con)"
+            />
+        </div>
+        <div>
+            Hit Dice: {character.level}d{character.clazz.hd.faces}
+            <i class="las la-info-circle cursor-help" title="based on class" />
         </div>
         <div>
             Proficiency Bonus: +{proficiencyBonus}

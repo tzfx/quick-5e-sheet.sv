@@ -1,5 +1,4 @@
 /node_modules/
-/public/build/
-/public/app.css
+/dist
 
 .DS_Store

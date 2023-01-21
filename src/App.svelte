@@ -1,7 +1,8 @@
 <script lang="ts">
     import Sheet from "./Sheet.svelte";
     import { randomClass } from "./srd/classes";
-    import { AbilityScores, Character, Skills } from "./types";
+    import type { Character } from "./types";
+    import { AbilityScores, Skills } from "./types";
     import { CharacterStorage } from "./utils/CharacterStorage";
 
     const storage: CharacterStorage = new CharacterStorage();
