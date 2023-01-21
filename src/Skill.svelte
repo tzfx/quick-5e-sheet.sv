@@ -36,15 +36,15 @@
     {modifier > 0 ? "+" + modifier : modifier}
     <button
         title="proficient"
+        disabled={locked}
         on:click={() => {
             if (!locked) {
                 skill.proficiency.bonus = skill.proficiency.next();
-                updateModifier();
+                updateModifier(); 
                 onchange();
             }
         }}
-        disabled={locked}
-        class="text-lg mx-auto las {skill.proficiency.bonus === 0
+        class="text-lg bg-transparent border-none h-8 outline-none mx-auto las {skill.proficiency.bonus === 0
             ? 'la-circle'
             : skill.proficiency.bonus === 1
             ? 'la-check-circle'

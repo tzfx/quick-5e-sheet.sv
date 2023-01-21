@@ -30,6 +30,16 @@
             dl = URL.createObjectURL(blob);
         }
     };
+
+    const calcHp = () => {
+        return (
+            character.clazz.hd.faces +
+            modraw(character.abilities.con.score) +
+            ((character.level - 1) *
+                (Math.ceil(character.clazz.hd.faces / 2) + 1) +
+                modraw(character.abilities.con.score))
+        );
+    };
 </script>
 
 <div>
@@ -97,6 +107,17 @@
                     {ability}
                 />
             {/each}
+        </div>
+        <div>
+            Estimated Max HP: {calcHp()}
+            <i
+                class="las la-info-circle cursor-help"
+                title="hitdie + con + ((level - 1) × (ceil(hitdie / 2) + 1) + con)"
+            />
+        </div>
+        <div>
+            Hit Dice: {character.level}d{character.clazz.hd.faces}
+            <i class="las la-info-circle cursor-help" title="based on class" />
         </div>
         <div>
             Proficiency Bonus: +{proficiencyBonus}
